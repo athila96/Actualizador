@@ -1,0 +1,3 @@
+# 1. Crear una funcion que compare el sku de products_yummy con la equivalencia de products_farmarket y validar que si en yummy hay un producto activo que no hay en farmarket hacer un request para apagar ese producto. 
+
+# 2. Revisar si la api de yummy muestra que algun producto este apagado. Si esta apagado comparar o revisar si hay existencia en farmarket para proceder a encenderlo. 

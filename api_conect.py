@@ -4,7 +4,7 @@ import datetime as dt
 import hashlib
 
 
-from utils import url, url_create_token, url_put_product_price, url_put_product_qty, user_data, partner_id
+from utils import url, url_create_token, user_data
 
 import actions 
 
@@ -97,9 +97,9 @@ def create_tokens():
         print(error)
 
 # La funcion recibe los productos actuales en Yummy
-def get_product_yummy(token, location): # Mudamos esta funcion a api_conect
+def get_product_yummy(token, location, partner_id): # Mudamos esta funcion a api_conect
 
-    url_get_product = f""
+    url_get_product = f"ts?partnerId={partner_id}"
 
     headers = {
         'Content-Type': 'application/json',
@@ -118,9 +118,11 @@ def get_product_yummy(token, location): # Mudamos esta funcion a api_conect
                 for all_product in data_product['data']['menu'][data_sort]:
                     product_items_yummy = {
                         'location': location,
+                        'partner_id': partner_id,
                         'sku': all_product['sku'],
                         'price': all_product['price'],
-                        'qty_available': all_product['qty_available']
+                        'qty_available': all_product['qty_available'],
+                        'enabled': all_product['enabled']
                     }
 
                     products_yummy.append(product_items_yummy) 
@@ -143,6 +145,7 @@ def put_price(token):
     }
 
     array_products_price = []
+    partner_id = ''
     for prices in actions.new_price:
         price_ultimate = {
                     'sku': prices['sku'], 
@@ -153,17 +156,23 @@ def put_price(token):
                         }
                     ]
                 }
+        partner_id = prices['partner_id']
         array_products_price.append(price_ultimate)
         
-    
+    if array_products_price == []:
+         print('Todo marcha bien...')
+         return
+
     data = {
         'type': 'price',
         'products': array_products_price
     }
 
-
-    with open("data_price.txt", "a") as log_file:
+    
+    with open("Logs/data_price.txt", "a") as log_file:
                     log_file.write(str(data) + "\n")
+
+    url_put_product_price = f'rtner_id'
 
     try:
         response = requests.put(url=url_put_product_price, json=data, headers=headers)
@@ -175,6 +184,9 @@ def put_price(token):
              print("No hay nuevas actualizaciones para aplicar")
              return
         
+        with open("Error/Errores_price.txt", "a") as log_file:
+            log_file.write(str(response.status_code) + "\n")
+
         print('Error de put_price: ', response.status_code)
         
     
@@ -192,6 +204,7 @@ def put_qty(token):
         
     
     array_product_qty = []
+    partner_id = ''
     for qty in actions.new_qty:
         qty_ultimate = {
                     'sku': qty['sku'], 
@@ -201,8 +214,12 @@ def put_qty(token):
                         }
                     ]
                 }
+        partner_id = qty['partner_id']
         array_product_qty.append(qty_ultimate)
         
+    if array_product_qty == []:
+         print('Todo marcha bien...')
+         return
     
     data = {
         'type': 'inventory',
@@ -210,8 +227,10 @@ def put_qty(token):
         'toggle_mode' : False
     }
 
-    with open("data_qty.txt", "a") as log_file:
+    with open("Logs/data_qty.txt", "a") as log_file:
                     log_file.write(str(data) + "\n")
+
+    url_put_product_qty = f'hd' 
 
     try:
         response = requests.put(url=url_put_product_qty, json=data, headers=headers)
@@ -223,11 +242,61 @@ def put_qty(token):
         elif response.status_code == 400:
              print("No hay nuevas actualizaciones para aplicar")
              return
+
+        with open("Error/Errores_qty.txt", "a") as log_file:
+                    log_file.write(str(response.status_code) + "\n")
         
         print('Error de put_qty: ', response.status_code)
-            
-        
         
 
+    except Exception as error:
+        print(error)
+
+# Desactiva los productos de la app de yummy cuando farmarket no tiene stock
+def put_product_deactivator(token):
+     
+    headers = {
+        "Authorization": f"Bearer {token}",
+        'Content-Type': 'application/json'
+    }
+
+
+    deactivate = []
+    partner_id = ''
+
+    for list_product in actions.desactivate:
+        partner_id = list_product['partner_id']
+        deactivate.append(list_product['sku'])
+        
+
+    
+    if deactivate == []:
+        print('No hay ningun producto para desactivar')
+        return
+    
+
+    data = {
+         'type': 'deactivate',
+         'productsSku': deactivate
+    }
+
+    url = f'https://api-integraciones.merak1.com/aerId='
+
+    try: 
+         response = requests.put(url=url, json=data, headers=headers)
+
+         if response.status_code == 200: 
+              print('Se desactivaron los productos correctamente')
+              return
+         
+         elif response.status_code == 400:
+            print("Ningun producto a desactivar")
+            return
+         
+         with open("Error/Errores_desactivando.txt", "a") as log_file:
+                    log_file.write(str(response.status_code) + "\n")
+
+         print('Error al desactivar productos: ', response.status_code)
+    
     except Exception as error:
         print(error)

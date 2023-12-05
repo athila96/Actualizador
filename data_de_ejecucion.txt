@@ -1,0 +1,6 @@
+Inicio de la ejecucion: 30-11-2023 09:59:20 Tiempo en ejecucion 60.05469083786011 segundos
+Inicio de la ejecucion: 30-11-2023 15:39:27 Tiempo en ejecucion 62.63844585418701 segundos
+Inicio de la ejecucion: 05-12-2023 13:46:26 Tiempo en ejecucion 244.7032811641693 segundos
+Inicio de la ejecucion: 05-12-2023 14:57:48 Tiempo en ejecucion 251.32708644866943 segundos
+Inicio de la ejecucion: 05-12-2023 15:20:37 Tiempo en ejecucion 214.35194492340088 segundos
+Inicio de la ejecucion: 05-12-2023 16:04:43 Tiempo en ejecucion 227.87524509429932 segundos
