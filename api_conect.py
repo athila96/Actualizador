@@ -17,7 +17,7 @@ products_yummy = []
 # FARMARKET
 
 def calculate_hash():
-    pre_shared_key = ""
+    pre_shared_key = "F4rm4rk3t_S13mpr3_H4y!"
     current_date_and_time = dt.datetime.now()
     milliseconds = int(current_date_and_time.timestamp() * 1000)
     key_union = str(milliseconds) + pre_shared_key
@@ -99,7 +99,7 @@ def create_tokens():
 # La funcion recibe los productos actuales en Yummy
 def get_product_yummy(token, location, partner_id): # Mudamos esta funcion a api_conect
 
-    url_get_product = f"ts?partnerId={partner_id}"
+    url_get_product = f""
 
     headers = {
         'Content-Type': 'application/json',
@@ -122,7 +122,8 @@ def get_product_yummy(token, location, partner_id): # Mudamos esta funcion a api
                         'sku': all_product['sku'],
                         'price': all_product['price'],
                         'qty_available': all_product['qty_available'],
-                        'enabled': all_product['enabled']
+                        'enabled': all_product['enabled'],
+                        'objectId': all_product['objectId']
                     }
 
                     products_yummy.append(product_items_yummy) 
@@ -172,7 +173,7 @@ def put_price(token):
     with open("Logs/data_price.txt", "a") as log_file:
                     log_file.write(str(data) + "\n")
 
-    url_put_product_price = f'rtner_id'
+    url_put_product_price = f''
 
     try:
         response = requests.put(url=url_put_product_price, json=data, headers=headers)
@@ -230,7 +231,7 @@ def put_qty(token):
     with open("Logs/data_qty.txt", "a") as log_file:
                     log_file.write(str(data) + "\n")
 
-    url_put_product_qty = f'hd' 
+    url_put_product_qty = f'h' 
 
     try:
         response = requests.put(url=url_put_product_qty, json=data, headers=headers)
@@ -280,7 +281,7 @@ def put_product_deactivator(token):
          'productsSku': deactivate
     }
 
-    url = f'https://api-integraciones.merak1.com/aerId='
+    url = f''
 
     try: 
          response = requests.put(url=url, json=data, headers=headers)
@@ -300,3 +301,54 @@ def put_product_deactivator(token):
     
     except Exception as error:
         print(error)
+
+
+def put_prduct_activate(token):
+     
+    headers = {
+        "Authorization": f"Bearer {token}",
+        'Content-Type': 'application/json'
+    }
+
+    if actions.activate == []:
+         print('El arreglo activate esta vacio. No hay nada que actualizar.')
+         return
+    
+    location = ''
+    product_id = ''
+    enabled = ''
+
+    for activate_product in actions.activate:
+         location = activate_product['location']
+         product_id = activate_product['objectId']
+         enabled = activate_product['enabled']
+
+    data = {'enabled': enabled}
+
+    url = f''
+
+    try:
+         
+        response = requests.put(url=url, json=data, headers=headers)
+
+        if response.status_code == 200:
+             
+             data_json = response.json()
+
+             with open("Logs/Productos_activados.txt", "a") as log_file:
+                  log_file.write(str(data_json) + '\n')
+
+                  return
+
+        with open("Error/Error_productos_activados.txt", "a") as log_file:
+                  log_file.write(str('Error: ', response.status_code) + '\n')
+
+                  return 
+        
+        
+
+    except Exception as error:
+         print(error)
+    
+
+

@@ -4,3 +4,4 @@ Inicio de la ejecucion: 05-12-2023 13:46:26 Tiempo en ejecucion 244.703281164169
 Inicio de la ejecucion: 05-12-2023 14:57:48 Tiempo en ejecucion 251.32708644866943 segundos
 Inicio de la ejecucion: 05-12-2023 15:20:37 Tiempo en ejecucion 214.35194492340088 segundos
 Inicio de la ejecucion: 05-12-2023 16:04:43 Tiempo en ejecucion 227.87524509429932 segundos
+Inicio de la ejecucion: 07-12-2023 10:43:40 Tiempo en ejecucion 245.73706459999084 segundos

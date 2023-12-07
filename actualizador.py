@@ -2,8 +2,8 @@ import time
 import datetime
 import pytz
 
-from actions import data_organizer, product_comparator, deactivador_comparator
-from api_conect import create_tokens, put_price, put_qty, put_product_deactivator
+from actions import data_organizer, product_comparator, deactivador_comparator, activator_comparator
+from api_conect import create_tokens, put_price, put_qty, put_product_deactivator, put_prduct_activate
 
 
     
@@ -17,6 +17,14 @@ tiempo_actual = datetime.datetime.now(tz_caracas)
 print('Analizando informacion ...')
 token = create_tokens()
 data_organizer(token)
+
+print('Analizando Informacion de los productos desactivados para activar...')
+
+activator_comparator()
+put_prduct_activate(token)
+
+print('Analizando data para precio y cantidad...')
+
 product_comparator()
 put_price(token)
 put_qty(token)

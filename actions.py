@@ -4,6 +4,7 @@ from api_conect import get_products_farmarket, get_product_yummy, products_farma
 new_price = []
 new_qty = []
 desactivate = []
+activate = []
 
 
 def stores():
@@ -101,3 +102,25 @@ def deactivador_comparator():
                           desactivate.append(deactivate_list)
 
                           return
+                     
+
+
+def activator_comparator():
+     for farmarket in products_farmarket:
+          for yummy in products_yummy:
+               if farmarket['Equivalencia'] == str(yummy['sku']):
+                    if yummy['enabled'] != True:
+                         if farmarket['Cantidad'] > 0:
+
+                                avtivate_list = {
+                                     'location': yummy['location'],
+                                     'objectId': yummy['objectId'],
+                                     'enabled': yummy['enabled']
+                                }
+
+                                activate.append(avtivate_list)
+
+                                return
+
+                    return print('Nada que activar. Todo esta en orden')     
+                    
